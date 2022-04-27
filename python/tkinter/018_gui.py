@@ -8,6 +8,23 @@ root.title('Sqlite3')
 
 # Create a db or connect to one
 
+def query():
+    conn = sqlite3.connect('book.db')
+    # create a cursor
+    c = conn.cursor()
+
+    c.execute("select oid,* from addresses")
+    #c.fetchone()
+    #c.fetchmany(50)
+    #records = c.fetchall()
+    record = ''
+    for r in c.fetchall():
+        record += str(r) + '\n  '
+    records_label['text'] = record
+
+    conn.commit()
+    c.close()
+    conn.close()
 
 def submit():
     conn = sqlite3.connect('book.db')
@@ -66,7 +83,14 @@ zipcode_label = Label(root, text="zipcode")
 zipcode_label.grid(row=5, column=0)
 
 # submit button
-submit_btn = Button(root, text="add", command=submit)
+submit_btn = Button(root, text="add.", command=submit)
 submit_btn.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+
+# qry button
+query_btn = Button(root, text="show", command=query)
+query_btn.grid(row=7, column=0, columnspan=2, padx=10, pady=10, ipadx=100)
+
+records_label = Label(root, text="")
+records_label.grid(row=8, column=0, columnspan=2)
 
 root.mainloop()
